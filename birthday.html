@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday — A Gift for You</title>
+  <!--
+    Instructions:
+    1) Save this file as `index.html` in a folder.
+    2) Create an `images/` folder next to it and add your 9 photos:
+       - images/her1.jpg, her2.jpg, her3.jpg
+       - images/us1.jpg, us2.jpg, us3.jpg
+       - images/flower1.jpg, flower2.jpg, flower3.jpg
+    3) Open index.html in your browser to preview.
+    4) When ready, tell me "done" and we'll style captions, colors, fonts, and animations step-by-step.
+
+    Quick tips:
+    - Replace file names in the <img> tags if yours differ.
+    - You can host for free on GitHub Pages or Netlify when ready.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #fff9fb;
+      --accent: #ff7aa2;
+      --muted: #6b6b6b;
+      --card: #ffffff;
+      --shadow: 0 8px 24px rgba(17,17,17,0.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      margin:0; background:var(--bg); color:#222; -webkit-font-smoothing:antialiased;
+      line-height:1.4;
+    }
+
+    /* Header */
+    header{
+      padding:56px 18px; text-align:center;
+      background: linear-gradient(120deg, rgba(255,122,162,0.14), rgba(255,187,204,0.08));
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+    }
+    header h1{font-size:2.2rem; margin:0 0 8px; letter-spacing:0.6px}
+    header p{margin:0; color:var(--muted)}
+
+    main{max-width:980px; margin:30px auto; padding:0 18px}
+
+    /* Wishes */
+    #wishes{padding:28px 0}
+    .wishes-list{display:flex; gap:12px; flex-direction:column; align-items:center}
+    .wish{background:var(--card); padding:14px 18px; border-radius:12px; box-shadow:var(--shadow); width:100%; max-width:760px}
+
+    /* Gallery */
+    #gallery{padding:22px 0}
+    .photo-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:20px;
+      align-items:start;
+    }
+
+    /* Polaroid style */
+    .polaroid{
+      background:linear-gradient(180deg, #fff 0%, #fff 100%);
+      padding:12px; border-radius:8px; box-shadow:var(--shadow);
+      transform-origin:center;
+      transition: transform 220ms ease, box-shadow 220ms ease;
+      display:flex; flex-direction:column; align-items:center;
+    }
+    .polaroid:hover{transform:translateY(-6px) scale(1.01); box-shadow: 0 16px 36px rgba(0,0,0,0.16)}
+
+    .polaroid img{width:100%; height:220px; object-fit:cover; border-radius:6px}
+    .caption{margin-top:10px; padding:8px 6px; width:100%; text-align:center; font-size:0.95rem; color:var(--muted); background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(249,249,249,0.9)); border-radius:6px}
+
+    /* Small responsive tweaks */
+    @media (max-width:900px){
+      .photo-grid{grid-template-columns: repeat(2, 1fr)}
+    }
+    @media (max-width:520px){
+      header h1{font-size:1.6rem}
+      .photo-grid{grid-template-columns:1fr}
+      .polaroid img{height:260px}
+    }
+
+    /* Affirmations + footer */
+    #affirmations{padding:28px 0}
+    .affirmation{background:var(--card); padding:18px; border-radius:10px; box-shadow:var(--shadow); margin-bottom:12px}
+    footer{text-align:center;padding:18px;color:var(--muted); font-size:0.95rem}
+
+    /* small playful tilt for different polaroids */
+    .polaroid:nth-child(3n){transform: rotate(-2deg)}
+    .polaroid:nth-child(3n+1){transform: rotate(1.2deg)}
+    .polaroid:nth-child(3n+2){transform: rotate(-0.6deg)}
+
+
+    /* Lock screen overlay */
+    #lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    /* Unlock animation */
+    #lock-screen.fade-out {
+      animation: unlockFade 1.2s ease forwards;
+    }
+
+    @keyframes unlockFade {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+
+    /* Lock box */
+    .lock-box {
+      background: white;
+      padding: 30px 25px;
+      border-radius: 14px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      text-align: center;
+      max-width: 320px;
+      width: 90%;
+    }
+
+    /* Input field */
+    .lock-box input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    /* Button */
+    .lock-box button {
+      margin-top: 14px;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .lock-box button:hover {
+      opacity: 0.9;
+    }
+
+    /* Error message */
+    #error-message {
+      color: red;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    #error-message {
+      color: #ff7aa2;
+    }
+
+    #countdown-text {
+      margin-top: 10px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    #hearts-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10000;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 3s ease forwards;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-120vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Password Overlay -->
+  <div id="lock-screen">
+    <div class="lock-box">
+      <h2>💖 A Special Gift 💖</h2>
+      <p>Only you know the key to my heart 💕</p>
+
+
+      <input type="password" id="password-input" placeholder="Enter password" />
+      <button onclick="unlock()">Unlock</button>
+
+      <p id="error-message"></p>
+      <p id="countdown-text"></p>
+    </div>
+  </div>
+
+  <div id="hearts-container"></div>
+
+
+  <header>
+    <h1>Happy Birthday, My Love ❤️</h1>
+    <p>Today we celebrate you — your smile, your kindness, your whole beautiful heart 🤭. Today I celebrate the birth of my favourite person and an angel 🥹. I love you princess❤️. I love you so much! Ghai 😭</p>
+  </header>
+
+  <main>
+    <!-- Wishes section -->
+    <section id="wishes">
+      <h2 style="text-align:center; margin-bottom:12px">Birthday Wishes</h2>
+      <div class="wishes-list">
+        <div class="wish">May your day be full of laughter, tiny surprises, and all the joy you bring to others. Speaking of tiny surprises, I have a surprise 🤭.</div>
+        <div class="wish">You are more beautiful than words could ever explain 🫵🥺. I told you I need a library 📚 to explain the amazing human being that you are before I get another library to explain how much I love you🥺 — I can never thank God eneough for giving me an angel all to myself.</div>
+        <div class="wish">When I say you are beautiful you ought to understand that your beauty is unfathomable. I can't explain it to anyone and they properly get the gist of your beauty 😍. People may say you are pretty and I do to but when I say you are beautiful you should get that I mean, "You are out of this world Gorgeous✨"</div>
+        <div class="wish">I hope this year grants every dream you whisper to your heart. I will always support you in all you yearn to achieve 🥺. You come first and you should never put me before your dreams and goals🤗.</div>
+      </div>
+    </section>
+
+    <!-- Gallery section -->
+    <section id="gallery">
+      <h2 style="text-align:center; margin-bottom:12px">Memories & Moments</h2>
+      <div class="photo-grid">
+        <!-- 3 her-only photos -->
+        <div class="polaroid">
+          <img src="Birthday Images/her1.jpg" alt="Her 1">
+          <div class="caption">I hope you see how beautiful you are &#128525. I know I do &#129303</div>
+        </div>
+        <div class="polaroid">
+          <img src="Birthday Images/her2.jpg" alt="Her 2">
+          <div class="caption">My Elegant Princess &#128525✨</div>
+        </div>
+        <div class="polaroid">
+          <img src="Birthday Images/her3.jpg" alt="Her 3">
+          <div class="caption">My Gorgeous lovely cutey patootie &#128149</div>
+
+        </div>
+
+        <!-- 3 pictures of you two -->
+        <div class="polaroid">
+          <img src="Birthday Images/us1.jpg" alt="Us 1">
+          <div class="caption">By the way, I don't like pics so this is proof of how much I love you &#129402</div>
+        </div>
+        <div class="polaroid">
+          <img src="Birthday Images/us2.jpg" alt="Us 2">
+          <div class="caption">I was forced to take this photo but I love every single part of it &#128538❤️</div>
+        </div>
+        <div class="polaroid">
+          <img src="Birthday Images/us3.jpg" alt="Us 3">
+          <div class="caption">Gawd, you are so freaking beautiful &#128557 &#128133</div>
+        </div>
+
+        <!-- 3 flowers / aesthetic photos with messages -->
+        <div class="polaroid">
+          <img src="Birthday Images/aesthetic1.jpg" alt="Flower 1">
+          <div class="caption">You bring me so much peace &#128557. More than I could get here &#129402</div>
+        </div>
+        <div class="polaroid">
+          <img src="Birthday Images/aesthetic2.jpg" alt="Flower 2">
+          <div class="caption">I've always loved this flower and any time I see it I think of you &#128149. Soft, strong and beautiful - just like you &#129781 &#129402</div>
+        </div>
+        <div class="polaroid">
+          <img src="Birthday Images/aesthetic3.jpg" alt="Flower 3">
+          <div class="caption">I think you are way more beautiful (beautifuler) than this 🤭</div>
+        </div>
+
+        <!-- 3 pictures to embarass her -->
+        <div class="polaroid">
+          <img src="Birthday Images/embarassment1.jpg" alt="Embarassment 1">
+          <div class="caption">Some embarassment won't hurt 😝</div>
+        </div>
+        <div class="polaroid">
+          <img src="Birthday Images/embarassment2.jpg" alt="Embarassment 2">
+          <div class="caption">Laughing together 😂🤣</div>
+        </div>
+        <div class="polaroid">
+          <img src="Birthday Images/embarassment3.jpg" alt="Embarassment 3">
+          <div class="caption">I would spoil you with my last cent by the way 🥹 because you are never a liability and you are my biggest investment🤭</div>
+        </div>
+
+
+        <!-- 3 Random Moments -->
+      <div class="polaroid">
+        <img src="Birthday Images/prettyprincess1.jpeg" alt="Extra 1">
+        <div class="caption">Talk about being gorgeous. You are so darn pretty🥺🤍</div>
+      </div>
+
+      <div class="polaroid">
+        <img src="Birthday Images/Randoms2.jpeg" alt="Extra 2">
+        <div class="caption">Super random but hella pretty 🤗</div>
+      </div>
+
+      <div class="polaroid">
+        <img src="Birthday Images/extra.jpeg" alt="Extra 3">
+        <div class="caption">That ghetto side of yours 😂. You made me run broke this day and I never got a thank you. Now I'm mad. Literally!!!</div>
+      </div>
+      </div>
+
+
+    </section>
+
+    <!-- Affirmations & promises -->
+    <section id="affirmations">
+      <h2 style="text-align:center; margin-bottom:12px">Words of Affirmation & Promises</h2>
+      <div class="affirmation">I see you. I hear you. I will stand with you through every high and low. I(squared) all the way honey. I am never giving up on you or on us 👨🏽‍❤️‍👩🏽. It's you and I've never been surer🥺🥹</div>
+      <div class="affirmation">I promise to grow with you, to drop all my toxic traits and unlearn my bad traits, to learn how to communicate, to learn from you, and to love you better each day because I want it to be you🥺💞.</div>
+      <div class="affirmation">You are worthy, cherished, and deeply loved — no exceptions. Let that sink in sweetheart, you deserve love and are absolutely worthy. You don't need to earn it because you deserve it and your value will never be gauged in terms of your output🥺.</div>
+
+      <article style="margin-top:14px; background:transparent; text-align:left">
+        <p style="margin:0 0 10px">My dearest — on your birthday I want to put into words what my heart already knows. I promise to prioritize your happiness, to listen first, and to be the steady hand you can always hold. I will celebrate your wins and sit with you in the quiet. I will protect your dreams and encourage the smallest steps toward them.</p>
+        <p style="margin:0">Thank you for being you. Thank you for letting me love you. Happy birthday, my sweet huggy wuggy🤗😚.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with love by Ignatius ❤️</p>
+  </footer>
+
+  <script>
+    if (sessionStorage.getItem("unlocked") === "true") {
+      document.getElementById("lock-screen").style.display = "none";
+    }
+
+
+    // Optional: small JS to reveal sections on scroll (simple, gentle)
+    document.addEventListener('DOMContentLoaded', function(){
+      const items = document.querySelectorAll('.polaroid, .wish, .affirmation');
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting) e.target.style.opacity = 1;
+        });
+      }, {threshold:0.12});
+      items.forEach(i=>{ i.style.opacity = 0; io.observe(i); });
+    });
+    
+    const correctPassword = "12012006";
+
+function unlock() {
+  const input = document.getElementById("password-input").value;
+  const error = document.getElementById("error-message");
+  const countdownText = document.getElementById("countdown-text");
+  const lockScreen = document.getElementById("lock-screen");
+
+  if (input !== correctPassword) {
+    error.textContent = "Incorrect password 💔";
+    return;
+  }
+
+  error.textContent = "";
+  let count = 3;
+
+  countdownText.textContent = `Unlocking in ${count}…`;
+
+  const countdown = setInterval(() => {
+    count--;
+
+    if (count > 0) {
+      countdownText.textContent = `Unlocking in ${count}…`;
+    } else {
+      clearInterval(countdown);
+
+      countdownText.textContent = "Happy Birthday, beautiful 💕";
+
+
+      // Remember unlock
+      sessionStorage.setItem("unlocked", "true");
+
+      // Animate fade-out
+      lockScreen.classList.add("fade-out");
+
+      // ❤️ START FLOATING HEARTS
+      startHearts(4000, 180);
+
+
+      // Remove from DOM after animation
+      setTimeout(() => {
+        lockScreen.style.display = "none";
+      }, 1200);
+    }
+  }, 1000);
+}
+
+    document.getElementById("password-input").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") unlock();
+    });
+
+    document.getElementById("password-input").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") unlock();
+    });
+
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.textContent = "💖";
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 14 + "px";
+
+      document.getElementById("hearts-container").appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 3000);
+    }
+
+    function startHearts(duration = 3000, interval = 200) {
+      const heartInterval = setInterval(createHeart, interval);
+
+      setTimeout(() => {
+        clearInterval(heartInterval);
+      }, duration);
+    }
+
+
+
+    setTimeout(() => {
+      sessionStorage.removeItem("unlocked");
+    }, 5 * 60 * 1000); // 5 minutes
+
+  </script>
+</body>
+</html>
